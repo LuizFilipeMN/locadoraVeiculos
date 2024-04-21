@@ -32,9 +32,28 @@ namespace locadoraVeiculos
         public DateTime DataFim { get; set; }
         public int VeiculoId { get; set; }
         public int ClienteId { get; set; }
+
         [ForeignKey("VeiculoId")]
         public virtual Veiculo? Veiculo { get; set; }
+
         [ForeignKey("ClienteId")]
         public virtual Cliente? Cliente { get; set; }
+    }
+
+    public class LocacaoDb : DbContext
+    {
+        public LocacaoDb(DbContextOptions<LocacaoDb> options)
+            : base(options) { }
+
+        public DbSet<Veiculo> Veiculo { get; set; }
+        public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Reserva> Reserva { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            _ = optionsBuilder.UseSqlServer(
+                @"Server=.\SQLEXPRESS;Database=ORN;Trusted_Connection=True;TrustServerCertificate=true;"
+            );
+        }
     }
 }
